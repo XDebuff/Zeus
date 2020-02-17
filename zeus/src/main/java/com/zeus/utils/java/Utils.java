@@ -17,7 +17,7 @@ import android.provider.MediaStore;
 import android.provider.Settings;
 import android.text.TextUtils;
 
-import com.zeus.cache.AppConfig;
+import com.zeus.core.cache.AppConfig;
 import com.zeus.utils.app.LogUtils;
 
 import java.util.Collections;

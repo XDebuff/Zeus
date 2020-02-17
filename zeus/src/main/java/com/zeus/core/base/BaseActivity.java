@@ -7,6 +7,7 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.zeus.R;
+import com.zeus.core.permission.PermissionActivity;
 import com.zeus.core.permission.PermissionProcessor;
 import com.zeus.core.ui.IHintView;
 
@@ -19,10 +20,9 @@ import androidx.appcompat.app.AppCompatActivity;
  * Data: 2017/5/21
  * Description: 
  ***************************************************/
-public abstract class BaseActivity extends AppCompatActivity implements IHintView {
+public abstract class BaseActivity extends PermissionActivity implements IHintView {
 
     protected final String TAG = this.getClass().getSimpleName();
-    protected PermissionProcessor mPermissionProcessor;
 
     private View emptyView;
     private View loadingView;
@@ -31,7 +31,6 @@ public abstract class BaseActivity extends AppCompatActivity implements IHintVie
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPermissionProcessor = new PermissionProcessor(this);
     }
 
     @Override

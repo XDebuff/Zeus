@@ -3,9 +3,16 @@ package com.zeus.core.permission;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ListActivity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Build;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -18,47 +25,40 @@ import androidx.core.content.ContextCompat;
  ***************************************************/
 public class PermissionProcessor {
 
-    private Activity mActivity;
+    private PermissionActivity mActivity;
 
-    public PermissionProcessor(Activity activity) {
+    private Map<String, IPermission> mPermissions = new HashMap<>();
+
+    public PermissionProcessor(PermissionActivity activity) {
         super();
         mActivity = activity;
+        init();
     }
 
-    public boolean isPermission(String[] permissions) {
+    private void init() {
+        register(Manifest.permission.WRITE_EXTERNAL_STORAGE, new ExternalStoragePermission(mActivity));
+        register(Manifest.permission.ACCESS_FINE_LOCATION, new LocationPermission(mActivity));
+    }
+
+    private void register(String permissionStr, IPermission permission) {
+        mPermissions.put(permissionStr, permission);
+    }
+
+    public void checkPermission(String... permissions) {
         //6.0以前不进行检测
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return true;
+            return;
         }
-        return PackageManager.PERMISSION_GRANTED ==
-                ContextCompat.checkSelfPermission(mActivity.getApplication(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
-    }
-
-    public void requestPermission(String[] permissions) {
-        if (!isPermission(permissions)) {
-            ActivityCompat.requestPermissions(mActivity,
-                    permissions,
-                    1);
-        }
-    }
-
-    public void requestCallback(int requestCode, @NonNull final String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == 1) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            } else { //用户不同意，向用户展示该权限作用
-                if (ActivityCompat.shouldShowRequestPermissionRationale(mActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                    new AlertDialog.Builder(mActivity).setMessage("权限申请")
-                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    ActivityCompat.requestPermissions(mActivity,
-                                            permissions, 0);
-                                }
-                            })
-                            .setNegativeButton("Cancel", null).create().show();
-                }
+        for (String permissionKey : permissions) {
+            IPermission permission = mPermissions.get(permissionKey);
+            if (permission != null) {
+                permission.requestPermission();
             }
         }
+    }
+
+    public void checkPermission(String permission) {
+        checkPermission(new String[]{permission});
     }
 
 }
