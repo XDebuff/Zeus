@@ -13,9 +13,11 @@ public class AppConfig {
     private int mScreenWidth;
     private int mScreenHeight;
 
-    private Context mContext;
-    private String mCacheDir;
+    private static Context mContext;
+    private static String mCacheDir;
     private static AppConfig mAppConfig;
+
+    public static String DEFAULT_KEY_NAME = "zeus_key";
 
     private AppConfig() {
         super();
@@ -28,7 +30,7 @@ public class AppConfig {
         return mAppConfig;
     }
 
-    public void init(Context context, String cacheDir) {
+    public static void init(Context context, String cacheDir) {
         mContext = context;
         mCacheDir = cacheDir;
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();

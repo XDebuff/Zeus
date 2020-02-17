@@ -1,4 +1,4 @@
-package com.zeus.core.library.map;
+package com.zeus.library.map;
 
 /***************************************************
  * Author: Debuff 

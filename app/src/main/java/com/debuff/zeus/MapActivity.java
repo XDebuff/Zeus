@@ -6,7 +6,7 @@ import android.widget.ImageView;
 
 import com.baidu.mapapi.map.MapView;
 import com.zeus.core.base.BaseActivity;
-import com.zeus.core.library.map.MapManager;
+import com.zeus.library.map.MapManager;
 
 import androidx.annotation.Nullable;
 import butterknife.BindView;

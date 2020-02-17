@@ -1,4 +1,4 @@
-package com.zeus.core.library.map;
+package com.zeus.library.map;
 
 import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;

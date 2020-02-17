@@ -14,4 +14,15 @@
         android:text="地图"
         android:textColor="#ffffff"
         android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/start_biometric_prompt"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="15dp"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:text="指纹识别"
+        android:textColor="#ffffff"
+        android:textSize="16sp" />
 </LinearLayout>
