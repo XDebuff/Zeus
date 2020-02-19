@@ -7,6 +7,15 @@ package com.zeus.library.map;
  ***************************************************/
 public class LocationPoint {
 
+    public LocationPoint(double latitude, double longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
+    public LocationPoint() {
+        super();
+    }
+
     public double getLatitude() {
         return latitude;
     }

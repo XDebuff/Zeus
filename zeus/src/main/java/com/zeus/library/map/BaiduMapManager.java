@@ -8,9 +8,9 @@ import com.baidu.mapapi.map.MapView;
 /***************************************************
  * Author: Debuff 
  * Data: 2017/5/21
- * Description: 
+ * Description: 百度地图
  ***************************************************/
-public class MapManager {
+public class BaiduMapManager implements IMap {
 
     private BaiduMap mBaiduMap;
     private MapView mMapView;
@@ -18,17 +18,14 @@ public class MapManager {
 
     private BaiduLocation mBaiduLocation;
 
-    public MapManager(MapView mapView) {
+    public BaiduMapManager(MapView mapView) {
         mMapView = mapView;
         mBaiduMap = mMapView.getMap();
         mBaiduLocation = new BaiduLocation(mMapView);
     }
 
-    public void location() {
-        mBaiduLocation.updateMapViewLocation(mBaiduLocation.getCurLat(), mBaiduLocation.getCurLng());
-    }
-
-    public void startLocation() {
+    @Override
+    public void start() {
         mBaiduMap.setMyLocationEnabled(true);
         //定位初始化
         mLocationClient = new LocationClient(mMapView.getContext());
@@ -48,14 +45,27 @@ public class MapManager {
         mLocationClient.start();
     }
 
+    @Override
+    public void location() {
+        mBaiduLocation.updateMapViewLocation(mBaiduLocation.getCurLat(), mBaiduLocation.getCurLng());
+    }
+
+    @Override
+    public LocationPoint getCurLatLng() {
+        return new LocationPoint(mBaiduLocation.getCurLat(), mBaiduLocation.getCurLng());
+    }
+
+    @Override
     public void onResume() {
         mMapView.onResume();
     }
 
+    @Override
     public void onPause() {
         mMapView.onPause();
     }
 
+    @Override
     public void onDestroy() {
         mBaiduMap.setMyLocationEnabled(false);
         mMapView.onDestroy();

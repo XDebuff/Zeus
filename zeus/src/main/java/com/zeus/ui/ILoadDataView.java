@@ -1,10 +1,14 @@
-package com.zeus.core.ui;
+package com.zeus.ui;
+
+import java.util.List;
 
 /***************************************************
  * Author: Debuff 
  * Data: 2018/12/5
  * Description: 
  ***************************************************/
-public interface IView {
+public interface ILoadDataView<T> extends IHintView {
+
+    void renderList(List<T> datum);
 
 }

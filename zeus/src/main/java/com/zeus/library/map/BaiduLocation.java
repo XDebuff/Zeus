@@ -12,7 +12,7 @@ import com.baidu.mapapi.model.LatLng;
 /***************************************************
  * Author: Debuff 
  * Data: 2017/5/21
- * Description: 
+ * Description: 百度地图定位处理
  ***************************************************/
 public class BaiduLocation extends BDAbstractLocationListener {
 

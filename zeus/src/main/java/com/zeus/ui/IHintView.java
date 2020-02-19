@@ -1,4 +1,4 @@
-package com.zeus.core.ui;
+package com.zeus.ui;
 
 /***************************************************
  * Author: Debuff 

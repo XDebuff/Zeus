@@ -6,7 +6,8 @@ import android.widget.ImageView;
 
 import com.baidu.mapapi.map.MapView;
 import com.zeus.core.base.BaseActivity;
-import com.zeus.library.map.MapManager;
+import com.zeus.library.map.BaiduMapManager;
+import com.zeus.library.map.IMap;
 
 import androidx.annotation.Nullable;
 import butterknife.BindView;
@@ -25,7 +26,7 @@ public class MapActivity extends BaseActivity {
     MapView mBmapView;
     @BindView(R.id.location_view)
     ImageView mLocationView;
-    private MapManager mMapManager;
+    private IMap mMapManager;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -35,8 +36,8 @@ public class MapActivity extends BaseActivity {
         mPermissionProcessor.checkPermission(
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.ACCESS_FINE_LOCATION);
-        mMapManager = new MapManager(mBmapView);
-        mMapManager.startLocation();
+        mMapManager = new BaiduMapManager(mBmapView);
+        mMapManager.start();
     }
 
     @Override

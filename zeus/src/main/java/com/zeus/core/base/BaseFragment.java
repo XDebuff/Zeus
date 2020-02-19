@@ -2,7 +2,7 @@ package com.zeus.core.base;
 
 import android.widget.Toast;
 
-import com.zeus.core.ui.IHintView;
+import com.zeus.ui.IHintView;
 
 import androidx.fragment.app.Fragment;
 

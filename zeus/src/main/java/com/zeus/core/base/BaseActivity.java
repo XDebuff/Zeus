@@ -8,11 +8,9 @@ import android.widget.Toast;
 
 import com.zeus.R;
 import com.zeus.core.permission.PermissionActivity;
-import com.zeus.core.permission.PermissionProcessor;
-import com.zeus.core.ui.IHintView;
+import com.zeus.ui.IHintView;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
 
 /***************************************************
