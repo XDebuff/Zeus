@@ -22,10 +22,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mBaiduMapView = findViewById(R.id.baidu_map_view);
         mStartBiometricPrompt = findViewById(R.id.start_biometric_prompt);
+        mBiometricPromptManager = new BiometricPromptManager(MainActivity.this);
         mStartBiometricPrompt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mBiometricPromptManager = new BiometricPromptManager(MainActivity.this);
                 mBiometricPromptManager.authenticate();
             }
         });

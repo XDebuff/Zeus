@@ -97,4 +97,12 @@ public class DateUtils {
         Calendar calendar = Calendar.getInstance();
         return calendar.get(Calendar.YEAR);
     }
+
+    public static String getDayByNumber() {
+        Calendar calendar = Calendar.getInstance();
+        return String.valueOf(calendar.get(Calendar.YEAR))
+                + String.valueOf(calendar.get(Calendar.MONTH))
+                + String.valueOf(calendar.get(Calendar.DAY_OF_YEAR));
+    }
+
 }

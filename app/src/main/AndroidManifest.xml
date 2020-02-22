@@ -20,6 +20,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".MapActivity" />
+
+        <service android:name=".LocationService" />
     </application>
 
 </manifest>

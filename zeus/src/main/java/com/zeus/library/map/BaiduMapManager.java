@@ -4,6 +4,11 @@ import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.map.Overlay;
+import com.baidu.mapapi.map.OverlayOptions;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /***************************************************
  * Author: Debuff 
@@ -17,6 +22,8 @@ public class BaiduMapManager implements IMap {
     private LocationClient mLocationClient;
 
     private BaiduLocation mBaiduLocation;
+
+    private List<ILocationListener> mListeners = new ArrayList<>();
 
     public BaiduMapManager(MapView mapView) {
         mMapView = mapView;
@@ -70,6 +77,25 @@ public class BaiduMapManager implements IMap {
         mBaiduMap.setMyLocationEnabled(false);
         mMapView.onDestroy();
         mMapView = null;
+    }
+
+
+    public void addListener(ILocationListener locationListener) {
+        mBaiduLocation.addListener(locationListener);
+    }
+
+    public void removeListener(ILocationListener locationListener) {
+        mBaiduLocation.removeListener(locationListener);
+    }
+
+    @Override
+    public void setListenerDelay(int time) {
+        mBaiduLocation.setListenerDelay(time);
+    }
+
+    @Override
+    public Overlay addOverlay(OverlayOptions overlayOptions) {
+        return mBaiduLocation.addOverlay(overlayOptions);
     }
 
 }
