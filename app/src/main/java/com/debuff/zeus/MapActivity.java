@@ -91,17 +91,13 @@ public class MapActivity extends BaseActivity {
         mMapManager.start();
         mMapManager.setListenerDelay(1000);
         mMapManager.addListener(new ILocationListener() {
-
-            double lat1 = 0;
-            double lng1 = 0;
-
             @Override
             public void update(double lat, double lng) {
                 if (!isStart) {
                     return;
                 }
                 mLocationStr.add("{" + lat + "," + lng + "}|");
-                points.add(new LatLng(lat1, lng1));
+                points.add(new LatLng(lat, lng));
                 if (mLocationStr.size() > 60) {
                     Intent intent = new Intent("action.zeus.location");
                     StringBuilder stringBuilder = new StringBuilder();
