@@ -4,4 +4,5 @@
 
     <string name="permission_external_storage_rationale">本应用需要存储权限</string>
     <string name="permission_find_location_rationale">本应用需要定位权限</string>
+    <string name="permission_camera_rationale">本应用需要相机权限</string>
 </resources>

@@ -3,19 +3,19 @@ package com.zeus.core.permission;
 import permissions.dispatcher.PermissionRequest;
 
 /***************************************************
- * Author: Debuff 
+ * Author: Debuff
  * Data: 2017/5/21
- * Description: 
+ * Description:
  ***************************************************/
-public class ExternalStoragePermission extends BasePermission {
+public class CameraPermission extends BasePermission {
 
-    public ExternalStoragePermission(PermissionActivity activity) {
+    public CameraPermission(PermissionActivity activity) {
         super(activity);
     }
 
     @Override
     public void requestPermission() {
-        PermissionActivityPermissionsDispatcher.needsExternalStoragePermissionWithPermissionCheck(mActivity);
+        PermissionActivityPermissionsDispatcher.needsCameraPermissionWithPermissionCheck(mActivity);
     }
 
     @Override
