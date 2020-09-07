@@ -22,7 +22,8 @@ import java.util.Map;
  * Data: 2017/5/21
  * Description:
  ***************************************************/
-public abstract class ZeusDatabase extends OrmLiteSqliteOpenHelper {
+public abstract class ZeusDatabase extends OrmLiteSqliteOpenHelper
+        implements DatabaseManager.ICreateTable {
 
     private static final String TAG = "MCDatabaseHelper";
 
@@ -30,8 +31,12 @@ public abstract class ZeusDatabase extends OrmLiteSqliteOpenHelper {
     private Map<Class, Dao> daoCache = new HashMap<>();
     private List<Class> tableClasses = new ArrayList<>();
 
-    private ZeusDatabase(Context context, String databaseName, SQLiteDatabase.CursorFactory factory, int databaseVersion) {
+    protected ZeusDatabase(Context context, String databaseName, SQLiteDatabase.CursorFactory factory, int databaseVersion) {
         super(context, databaseName, factory, databaseVersion);
+    }
+
+    public void init() {
+
     }
 
     public static ZeusDatabase getInstance() {
@@ -41,20 +46,11 @@ public abstract class ZeusDatabase extends OrmLiteSqliteOpenHelper {
         return mcDatabaseHelper;
     }
 
-    public void createTable(Class tableClass) {
-        tableClasses.add(tableClass);
-    }
-
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase, ConnectionSource connectionSource) {
         //创建表
         try {
-            for (Class<?> tableClass : tableClasses) {
-                if (tableClass != null) {
-                    TableUtils.createTable(connectionSource, tableClass);
-                    LogUtils.d(TAG, "创建：" + tableClass.getSimpleName() + "表");
-                }
-            }
+            createAllTable();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -66,7 +62,7 @@ public abstract class ZeusDatabase extends OrmLiteSqliteOpenHelper {
         dbUpgradeInfo.setOldVersion(oldVersion);
         dbUpgradeInfo.setNewVersion(newVersion);
         dbUpgradeInfo.setUpdateType(AppConstants.DB_UPGRADE_TYPE);
-        DatabaseManager manager = new DatabaseManager(sqLiteDatabase, connectionSource, dbUpgradeInfo);
+        DatabaseManager manager = new DatabaseManager(sqLiteDatabase, dbUpgradeInfo);
         try {
             manager.upgradeTable();
         } catch (SQLException e) {

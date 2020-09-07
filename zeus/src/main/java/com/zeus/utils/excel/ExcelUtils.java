@@ -8,6 +8,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -47,8 +48,6 @@ public class ExcelUtils {
                         if (chanelCode != null && chanelName != null) {
                             String code = "";
                             String name = "";
-//                            String code = NotificationLite.getValue(chanelCode);
-//                            String name = NotificationLite.getValue(chanelName);
                             if (!"".equals(code) && !"".equals(name)) {
                                 String result = code + "##" + name;
                             } else {
@@ -67,15 +66,8 @@ public class ExcelUtils {
         }
     }
 
-    public static Workbook getWorkbookCompat(String filePath) {
-        if ("".equals(filePath) || filePath == null) {
-            return null;
-        }
-        InputStream inputStream;
+    public static Workbook getWorkbookCompat(InputStream inputStream, String ext) {
         try {
-            inputStream = new FileInputStream(filePath);
-            String[] fileStrArr = filePath.split("\\.");
-            String ext = fileStrArr[fileStrArr.length - 1];
             if ("xls".equals(ext)) {
                 return new HSSFWorkbook(inputStream);
             } else if ("xlsx".equals(ext)) {
@@ -85,6 +77,16 @@ public class ExcelUtils {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static Workbook getWorkbookCompat(String filePath) throws FileNotFoundException {
+
+        String[] fileStrArr = filePath.split("\\.");
+        String ext = fileStrArr[fileStrArr.length - 1];
+        if ("".equals(filePath) || filePath == null) {
+            return null;
+        }
+        return getWorkbookCompat(new FileInputStream(filePath), ext);
     }
 
 
@@ -103,6 +105,9 @@ public class ExcelUtils {
                     break;
                 case Cell.CELL_TYPE_STRING:
                     datum.add(cell.getStringCellValue());
+                    break;
+                default:
+                    datum.add(null);
                     break;
             }
         }
@@ -137,6 +142,15 @@ public class ExcelUtils {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+
+    public static int toColumnIndex(String str) {
+        return Hex26.compareHex26(str);
+    }
+
+    public static String toColumnStr(int i) {
+        return Hex26.toHex26(i);
     }
 
 }

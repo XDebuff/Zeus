@@ -38,9 +38,10 @@ public class PermissionProcessor {
     private void init() {
         register(Manifest.permission.WRITE_EXTERNAL_STORAGE, new ExternalStoragePermission(mActivity));
         register(Manifest.permission.ACCESS_FINE_LOCATION, new LocationPermission(mActivity));
+        register(Manifest.permission.ACCESS_FINE_LOCATION, new LocationPermission(mActivity));
     }
 
-    private void register(String permissionStr, IPermission permission) {
+    public void register(String permissionStr, IPermission permission) {
         mPermissions.put(permissionStr, permission);
     }
 

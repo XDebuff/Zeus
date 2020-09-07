@@ -47,6 +47,10 @@ public abstract class SelectRecyclerViewAdapter<V extends RecyclerView.ViewHolde
     @Override
     public void clear() {
         super.clear();
+        clearSelectState();
+    }
+
+    public void clearSelectState() {
         mSelectedList.clear();
         mUnSelectList.clear();
     }

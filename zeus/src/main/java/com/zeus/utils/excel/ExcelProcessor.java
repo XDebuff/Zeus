@@ -4,6 +4,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,6 +20,8 @@ public class ExcelProcessor {
 
     private String TAG = "ExcelProcessor";
     private String filePath;
+    private String ext;
+    private InputStream inputStream;
     private int mFirstRowNum;
     private int mSheetNum;
 
@@ -31,11 +34,24 @@ public class ExcelProcessor {
         this.filePath = filePath;
     }
 
+    public ExcelProcessor(InputStream inputStream, String ext) {
+        super();
+        this.inputStream = inputStream;
+        this.ext = ext;
+    }
+
     public <D, T> Map<D, T> readExcelMap(Class<D> idClass, Class<T> dataClass) {
         Map<D, T> result = new HashMap<>();
+        Workbook workbook = null;
         try {
             //读取Excel
-            Workbook workbook = ExcelUtils.getWorkbookCompat(filePath);
+            if (filePath != null && "".equals(filePath)) {
+                workbook = ExcelUtils.getWorkbookCompat(filePath);
+            } else if (inputStream != null) {
+                workbook = ExcelUtils.getWorkbookCompat(inputStream, ext);
+            } else {
+                throw new IllegalArgumentException("filePath or inputSteam is null or empty");
+            }
             System.out.print("开始遍历" + filePath + "文件");
             if (workbook == null) {
                 return null;
@@ -62,8 +78,7 @@ public class ExcelProcessor {
 //                    System.out.println(annotation.type() == 1 ? "列为基础" : "行为基础");
                     System.out.print("当前遍历第" + (i + 1) + "行" + ",");
                     System.out.println("第" + annotation.value() + "列");
-//                    int cellNum = ExcelUtils.toColumnIndex(annotation.value());
-                    int cellNum = 0;
+                    int cellNum = ExcelUtils.toColumnIndex(annotation.value());
                     if (cellNum == -1) {
                         continue;
                     }
@@ -85,13 +100,17 @@ public class ExcelProcessor {
     }
 
     public <T> List<T> readExcel(Class<T> clazz) {
-        if (filePath == null || "".equals(filePath)) {
-            throw new IllegalArgumentException("filePath is null or empty");
-        }
+        Workbook workbook = null;
         List<T> result = new ArrayList<>();
         try {
             //读取Excel
-            Workbook workbook = ExcelUtils.getWorkbookCompat(filePath);
+            if (filePath != null && "".equals(filePath)) {
+                workbook = ExcelUtils.getWorkbookCompat(filePath);
+            } else if (inputStream != null) {
+                workbook = ExcelUtils.getWorkbookCompat(inputStream, ext);
+            } else {
+                throw new IllegalArgumentException("filePath or inputSteam is null or empty");
+            }
             System.out.print("开始遍历" + filePath + "文件");
             if (workbook == null) {
                 return null;
@@ -121,7 +140,7 @@ public class ExcelProcessor {
                     }
                     //读取Excel的一行值
                     field.setAccessible(true);
-                    field.set(data, rowData.get(cellNum));
+                    field.set(data, rowData.get(cellNum).toString());
                 }
                 result.add(data);
             }

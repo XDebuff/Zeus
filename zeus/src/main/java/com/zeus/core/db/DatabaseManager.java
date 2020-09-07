@@ -24,13 +24,17 @@ public class DatabaseManager {
     private final int mOldVersion;
     private final int mNewVersion;
     private final SQLiteDatabase mSqLiteDatabase;
-    private final ConnectionSource mConnectionSource;
     private List<String> passTables = Arrays.asList(new String[]{"sqlite_sequence", "android_metadata"});
 
-    public DatabaseManager(SQLiteDatabase sqLiteDatabase, ConnectionSource connectionSource, DBUpgradeInfo dbUpgradeInfo) {
+    public void setICreateTable(ICreateTable ICreateTable) {
+        mICreateTable = ICreateTable;
+    }
+
+    private ICreateTable mICreateTable;
+
+    public DatabaseManager(SQLiteDatabase sqLiteDatabase, DBUpgradeInfo dbUpgradeInfo) {
         super();
         mSqLiteDatabase = sqLiteDatabase;
-        mConnectionSource = connectionSource;
         mOldVersion = dbUpgradeInfo.getOldVersion();
         mNewVersion = dbUpgradeInfo.getNewVersion();
     }
@@ -117,7 +121,10 @@ public class DatabaseManager {
     }
 
     private void createTables() throws SQLException {
-//        MCDatabaseHelper.getInstance().createAllTable(mConnectionSource);
+        if (mICreateTable == null) {
+            throw new IllegalArgumentException("接口没有实现");
+        }
+        mICreateTable.createAllTable();
     }
 
     class TableSet {
@@ -137,6 +144,10 @@ public class DatabaseManager {
             this.tableName = tableName;
             this.tempTableName = "temp_" + tableName;
         }
+    }
+
+    public interface ICreateTable {
+        void createAllTable() throws SQLException;
     }
 
 }
