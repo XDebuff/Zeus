@@ -48,7 +48,7 @@ public class PermissionActivity extends AppCompatActivity {
     public void needsExternalStoragePermission() {
         // NOTE: Perform action that requires the permission. If this is run by PermissionsDispatcher, the permission will have been granted
         Log.d(TAG, "needsExternalStoragePermission");
-        Toast.makeText(this, "成功申请存储权限", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "我需要存储权限", Toast.LENGTH_SHORT).show();
     }
 
 
@@ -128,51 +128,6 @@ public class PermissionActivity extends AppCompatActivity {
         showAskAgainDialog("定位权限被拒绝，请手动打开权限");
     }
     //----------------------------------------------------------------------------------------------
-
-    //--------------------------------------存储权限------------------------------------------------
-
-    /**
-     * Annotate a method which performs the action that requires one or more permissions
-     */
-    @NeedsPermission(Manifest.permission.CAMERA)
-    public void needsCameraPermission() {
-        // NOTE: Perform action that requires the permission. If this is run by PermissionsDispatcher, the permission will have been granted
-        Log.d(TAG, "needsExternalStoragePermission");
-        Toast.makeText(this, "成功申请相机权限", Toast.LENGTH_SHORT).show();
-    }
-
-
-    /**
-     * Annotate a method which is invoked if the user doesn't grant the permissions
-     */
-    @OnPermissionDenied(Manifest.permission.CAMERA)
-    public void onCameraPermissionDenied() {
-        Log.d(TAG, "onExternalStoragePermissionDenied");
-        Toast.makeText(this, "用户拒绝了存储权限", Toast.LENGTH_SHORT).show();
-    }
-
-    /**
-     * Annotate a method which explains why the permissions are needed.
-     * It passes in a PermissionRequest object which can be used to continue
-     * or abort the current permission request upon user input.
-     * If you don't specify any argument for the method compiler will generate
-     *
-     * @param request
-     */
-    @OnShowRationale(Manifest.permission.CAMERA)
-    public void onShowRationaleForCamera(PermissionRequest request) {
-        // NOTE: Show a rationale to explain why the permission is needed, e.g. with a dialog.
-        // Call proceed() or cancel() on the provided PermissionRequest to continue or abort
-        Log.d(TAG, "onShowRationaleForExternalStorage");
-        showHintDialog(R.string.permission_external_storage_rationale, request);
-    }
-
-    @OnNeverAskAgain(Manifest.permission.CAMERA)
-    public void showNeverAskForCamera() {
-        Log.d(TAG, getResources().getString(R.string.permission_external_storage_rationale));
-    }
-    //----------------------------------------------------------------------------------------------
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
