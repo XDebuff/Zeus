@@ -15,9 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /***************************************************
- * Author: Debuff 
+ * Author: Debuff
  * Data: 2017/5/21
- * Description: 
+ * Description:
  ***************************************************/
 public class ExcelUtils {
 
@@ -97,13 +97,13 @@ public class ExcelUtils {
         for (int j = firstCellNum; j < lastCellNum; j++) {
             Cell cell = row.getCell(j);
             switch (cell.getCellType()) {
-                case Cell.CELL_TYPE_BOOLEAN:
+                case BOOLEAN:
                     datum.add(cell.getBooleanCellValue());
                     break;
-                case Cell.CELL_TYPE_NUMERIC:
+                case NUMERIC:
                     datum.add(cell.getNumericCellValue());
                     break;
-                case Cell.CELL_TYPE_STRING:
+                case STRING:
                     datum.add(cell.getStringCellValue());
                     break;
                 default:
