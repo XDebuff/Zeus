@@ -21,17 +21,16 @@ import io.reactivex.ObservableOnSubscribe;
  * Data: 2017/5/21
  * Description:
  ***************************************************/
-public abstract class RxRepository<T> implements IRxRepository<T> {
+public abstract class RxRepository<T,D> implements IRxRepository<T, D> {
 
     private static final Map<Class, Class> cacheModelClass = new HashMap<>();
 
     protected Context context;
 
-    protected Dao<T, Integer> mDao;
+    protected Dao<T, D> mDao;
 
     public RxRepository() {
         Class clazz = getModelClass();
-//        mDao = MCDatabaseHelper.getInstance().getDaoImp(clazz);
     }
 
     public void init(Context context) {
@@ -138,7 +137,7 @@ public abstract class RxRepository<T> implements IRxRepository<T> {
     }
 
     @Override
-    public Observable<T> query(final Integer id) {
+    public Observable<T> query(final D id) {
         return Observable.create(new ObservableOnSubscribe<T>() {
             @Override
             public void subscribe(ObservableEmitter<T> e) {
