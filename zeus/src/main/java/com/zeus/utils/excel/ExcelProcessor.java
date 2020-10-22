@@ -1,9 +1,12 @@
 package com.zeus.utils.excel;
 
+import android.util.Log;
+
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -12,9 +15,9 @@ import java.util.List;
 import java.util.Map;
 
 /***************************************************
- * Author: Debuff
+ * Author: Debuff 
  * Data: 2019/3/21
- * Description:
+ * Description: 
  ***************************************************/
 public class ExcelProcessor {
 
@@ -24,6 +27,22 @@ public class ExcelProcessor {
     private InputStream inputStream;
     private int mFirstRowNum;
     private int mSheetNum;
+
+    public Workbook getWorkbook() {
+        return mWorkbook;
+    }
+
+    private Workbook mWorkbook;
+
+    public void setOnProgressListener(onProgressListener onProgressListener) {
+        mOnProgressListener = onProgressListener;
+    }
+
+    private onProgressListener mOnProgressListener;
+
+    public interface onProgressListener {
+        void onProgress(int curRowIndex, int maxRowCount);
+    }
 
     public ExcelProcessor() {
         super();
@@ -56,6 +75,7 @@ public class ExcelProcessor {
             if (workbook == null) {
                 return null;
             }
+            mWorkbook = workbook;
             Sheet sheet = workbook.getSheetAt(mSheetNum);
             if (sheet == null) {
                 return null;
@@ -89,6 +109,9 @@ public class ExcelProcessor {
                     //读取Excel的一行值
                     field.setAccessible(true);
                     field.set(data, rowData.get(cellNum));
+                    if (mOnProgressListener != null) {
+                        mOnProgressListener.onProgress(i, sheet.getLastRowNum());
+                    }
                 }
                 result.put(id, data);
             }
@@ -104,17 +127,18 @@ public class ExcelProcessor {
         List<T> result = new ArrayList<>();
         try {
             //读取Excel
-            if (filePath != null && "".equals(filePath)) {
+            if (filePath != null && !"".equals(filePath)) {
                 workbook = ExcelUtils.getWorkbookCompat(filePath);
             } else if (inputStream != null) {
                 workbook = ExcelUtils.getWorkbookCompat(inputStream, ext);
             } else {
                 throw new IllegalArgumentException("filePath or inputSteam is null or empty");
             }
-            System.out.print("开始遍历" + filePath + "文件");
+//            System.out.print("开始遍历" + filePath + "文件");
             if (workbook == null) {
                 return null;
             }
+            mWorkbook = workbook;
             Sheet sheet = workbook.getSheetAt(mSheetNum);
             if (sheet == null) {
                 return null;
@@ -132,8 +156,8 @@ public class ExcelProcessor {
                         continue;
                     }
 //                    System.out.println(annotation.type() == 1 ? "列为基础" : "行为基础");
-                    System.out.print("当前遍历第" + (i + 1) + "行" + ",");
-                    System.out.println("第" + annotation.value() + "列");
+//                    System.out.print("当前遍历第" + (i + 1) + "行" + ",");
+//                    System.out.println("第" + annotation.value() + "列");
                     int cellNum = Hex26.compareHex26(annotation.value());
                     if (cellNum == -1) {
                         continue;
@@ -141,6 +165,9 @@ public class ExcelProcessor {
                     //读取Excel的一行值
                     field.setAccessible(true);
                     field.set(data, rowData.get(cellNum).toString());
+                    if (mOnProgressListener != null) {
+                        mOnProgressListener.onProgress(i, sheet.getLastRowNum());
+                    }
                 }
                 result.add(data);
             }
@@ -150,6 +177,57 @@ public class ExcelProcessor {
         //初始化实体类
         return result;
     }
+
+    public List<String[]> read() {
+        Workbook workbook = null;
+        List<String[]> result = new ArrayList<>();
+        try {
+            //读取Excel
+            if (filePath != null && !"".equals(filePath)) {
+                workbook = ExcelUtils.getWorkbookCompat(filePath);
+            } else if (inputStream != null) {
+                workbook = ExcelUtils.getWorkbookCompat(inputStream, "xls");
+            } else {
+                throw new IllegalArgumentException("filePath or inputSteam is null or empty");
+            }
+            if (workbook == null) {
+                Log.d("ExcelProcessor", "work is null");
+                return null;
+            }
+            mWorkbook = workbook;
+            Sheet sheet = workbook.getSheetAt(mSheetNum);
+            if (sheet == null) {
+                Log.d("ExcelProcessor", "sheet is null");
+                return null;
+            }
+            for (int i = mFirstRowNum; i <= sheet.getLastRowNum(); i++) {
+                Row row = sheet.getRow(i);
+                List<Object> rowData = ExcelUtils.getRowData(row);
+                String[] strings = new String[rowData.size()];
+                for (int j = 0; j < rowData.size(); j++) {
+                    strings[j] = rowData.get(j).toString();
+                }
+                result.add(strings);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        //初始化实体类
+        return result;
+    }
+
+    public void readCell(int rowIndex, int cellIndex) {
+
+    }
+
 
     public void setFirstRowNum(int firstRowNum) {
         mFirstRowNum = firstRowNum;

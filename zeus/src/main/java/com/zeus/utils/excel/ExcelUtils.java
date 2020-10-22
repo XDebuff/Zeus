@@ -1,5 +1,7 @@
 package com.zeus.utils.excel;
 
+import android.util.Log;
+
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -15,9 +17,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /***************************************************
- * Author: Debuff
+ * Author: Debuff 
  * Data: 2017/5/21
- * Description:
+ * Description: 
  ***************************************************/
 public class ExcelUtils {
 
@@ -74,6 +76,7 @@ public class ExcelUtils {
                 return new XSSFWorkbook(inputStream);
             }
         } catch (Exception e) {
+            Log.d("ExcelProcessor", e.getMessage());
             e.printStackTrace();
         }
         return null;
@@ -96,18 +99,21 @@ public class ExcelUtils {
         List<Object> datum = new ArrayList<>();
         for (int j = firstCellNum; j < lastCellNum; j++) {
             Cell cell = row.getCell(j);
+            if (cell == null) {
+                continue;
+            }
             switch (cell.getCellType()) {
-                case BOOLEAN:
+                case Cell.CELL_TYPE_BOOLEAN:
                     datum.add(cell.getBooleanCellValue());
                     break;
-                case NUMERIC:
+                case Cell.CELL_TYPE_NUMERIC:
                     datum.add(cell.getNumericCellValue());
                     break;
-                case STRING:
+                case Cell.CELL_TYPE_STRING:
                     datum.add(cell.getStringCellValue());
                     break;
                 default:
-                    datum.add(null);
+                    datum.add("");
                     break;
             }
         }
