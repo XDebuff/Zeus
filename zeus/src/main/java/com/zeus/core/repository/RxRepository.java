@@ -21,7 +21,7 @@ import io.reactivex.ObservableOnSubscribe;
  * Data: 2017/5/21
  * Description:
  ***************************************************/
-public abstract class RxRepository<T,D> implements IRxRepository<T, D> {
+public abstract class RxRepository<T, D> implements IRxRepository<T, D> {
 
     private static final Map<Class, Class> cacheModelClass = new HashMap<>();
 
@@ -30,7 +30,6 @@ public abstract class RxRepository<T,D> implements IRxRepository<T, D> {
     protected Dao<T, D> mDao;
 
     public RxRepository() {
-        Class clazz = getModelClass();
     }
 
     public void init(Context context) {
@@ -126,6 +125,78 @@ public abstract class RxRepository<T,D> implements IRxRepository<T, D> {
                 int count = 0;
                 try {
                     count = mDao.delete(data);
+                } catch (SQLException e1) {
+                    e.onError(e1);
+                    e1.printStackTrace();
+                }
+                e.onNext(count > 0);
+                e.onComplete();
+            }
+        });
+    }
+
+    @Override
+    public Observable<Boolean> deleteById(final D id) {
+        return Observable.create(new ObservableOnSubscribe<Boolean>() {
+            @Override
+            public void subscribe(ObservableEmitter<Boolean> e) {
+                int count = 0;
+                try {
+                    count = mDao.deleteById(id);
+                } catch (SQLException e1) {
+                    e.onError(e1);
+                    e1.printStackTrace();
+                }
+                e.onNext(count > 0);
+                e.onComplete();
+            }
+        });
+    }
+
+    @Override
+    public Observable<Boolean> deleteByIds(final List<D> ids) {
+        return Observable.create(new ObservableOnSubscribe<Boolean>() {
+            @Override
+            public void subscribe(ObservableEmitter<Boolean> e) {
+                int count = 0;
+                try {
+                    count = mDao.deleteIds(ids);
+                } catch (SQLException e1) {
+                    e.onError(e1);
+                    e1.printStackTrace();
+                }
+                e.onNext(count > 0);
+                e.onComplete();
+            }
+        });
+    }
+
+    @Override
+    public Observable<Boolean> delete(final List<T> data) {
+        return Observable.create(new ObservableOnSubscribe<Boolean>() {
+            @Override
+            public void subscribe(ObservableEmitter<Boolean> e) {
+                int count = 0;
+                try {
+                    count = mDao.delete(data);
+                } catch (SQLException e1) {
+                    e.onError(e1);
+                    e1.printStackTrace();
+                }
+                e.onNext(count > 0);
+                e.onComplete();
+            }
+        });
+    }
+
+    @Override
+    public Observable<Boolean> deleteAll() {
+        return Observable.create(new ObservableOnSubscribe<Boolean>() {
+            @Override
+            public void subscribe(ObservableEmitter<Boolean> e) {
+                int count = 0;
+                try {
+                    count = mDao.deleteBuilder().delete();
                 } catch (SQLException e1) {
                     e.onError(e1);
                     e1.printStackTrace();

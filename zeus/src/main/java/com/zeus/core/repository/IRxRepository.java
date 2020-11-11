@@ -10,7 +10,7 @@ import io.reactivex.Observable;
  * Description:
  ***************************************************/
 
-public interface IRxRepository<T,D> extends IRepository<T> {
+public interface IRxRepository<T, D> extends IRepository<T> {
 
     Observable<Boolean> create(T data);
 
@@ -21,6 +21,14 @@ public interface IRxRepository<T,D> extends IRepository<T> {
     Observable<Boolean> update(List<T> data);
 
     Observable<Boolean> delete(T data);
+
+    Observable<Boolean> deleteById(D data);
+
+    Observable<Boolean> delete(List<T> data);
+
+    Observable<Boolean> deleteByIds(List<D> data);
+
+    Observable<Boolean> deleteAll();
 
     Observable<T> query(D id);
 
